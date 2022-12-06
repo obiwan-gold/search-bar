@@ -2,15 +2,7 @@ import { useState, useEffect } from "react";
 
 import "./App.css";
 
-function Animal({ type, name, age }) {
-  return (
-    <p>
-      <strong>{type}</strong> {name} {age}
-    </p>
-  );
-}
-
-function App() {
+function useAnimalSearch() {
   // Send data from input to the server so that it can return the query result
   const [animals, setAnimals] = useState([]);
 
@@ -33,9 +25,22 @@ function App() {
     // response into json, set data as state of component
     setAnimals(data);
 
+    // Side Effect when the component was first mounted
     localStorage.setItem("lastQuery", q);
   };
+  return { search, animals };
+}
 
+function Animal({ type, name, age }) {
+  return (
+    <p>
+      <strong>{type}</strong> {name} {age}
+    </p>
+  );
+}
+
+function App() {
+  const { search, animals } = useAnimalSearch(); //Creating a custom hook so that other components that may want to use this in the future can
   return (
     <div className="App">
       <h1>Animal Farm</h1>
